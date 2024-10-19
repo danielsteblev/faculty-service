@@ -1,90 +1,92 @@
-{% from 'bootstrap5/form.html' import render_form, render_field %}
+<!--{% from 'bootstrap/wtf.html' import form_field %}-->
 
-{% block content %}
-<!--<div class="modal" id="createModal">-->
-<!--    <div class="modal-dialog">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title">Создание записи</h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal">&times;</button>-->
-<!--            </div>-->
-
-<!--            <div class="modal-body">-->
-<!--                <form id="createForm" action="/create-student" method="POST">-->
-<!--                    <div class="form-group row">-->
-<!--                        <label for="name" class="col-sm-2 col-form-label mt-2">Имя</label>-->
-<!--                        <div class="col-sm-10">-->
-<!--                            <input type="text" class="form-control" name="name" id="name" required>-->
-<!--                        </div>-->
-<!--                        <label for="surname" class="col-sm-2 col-form-label mt-2">Фамилия</label>-->
-<!--                        <div class="col-sm-10">-->
-<!--                            <input type="text" class="form-control" name="surname" id="surname" required>-->
-<!--                        </div>-->
-<!--                        <label for="patronymic" class="col-sm-2 col-form-label mt-2">Отчество</label>-->
-<!--                        <div class="col-sm-10">-->
-<!--                            <input type="text" class="form-control" name="patronymic" id="patronymic" required>-->
-<!--                        </div>-->
-<!--                        <label for="group_id" class="col-sm-2 col-form-label mt-2">Группа(id)</label>-->
-<!--                        <div class="col-sm-10">-->
-<!--                            <select id="group_id" class="form-control" name="group_id">-->
-<!--                                {% for group in groups %}-->
-<!--                                <option value="{{ group.group_id }}">{{ group.group_id }}</option>-->
-<!--                                {% endfor %}-->
-<!--                            </select>-->
-<!--                        </div>-->
-<!--                        <label for="phone_number" class="col-sm-2 col-form-label mt-2">Телефон</label>-->
-<!--                        <div class="col-sm-10">-->
-<!--                            <input type="text" class="form-control" name="phone_number" id="phone_number" required>-->
-<!--                        </div>-->
-<!--                        <label for="email" class="col-sm-2 col-form-label mt-2">Email</label>-->
-<!--                        <div class="col-sm-10">-->
-<!--                            <input type="text" class="form-control" name="email" id="email" required>-->
-<!--                        </div>-->
-<!--                        <label for="birthday" class="col-sm-2 col-form-label mt-2">Др</label>-->
-<!--                        <div class="col-sm-10">-->
-<!--                            <input type="text" class="form-control" name="birthday" id="birthday" required>-->
-<!--                        </div>-->
-<!--                        <label for="city" class="col-sm-2 col-form-label mt-2">Город</label>-->
-<!--                        <div class="col-sm-10">-->
-<!--                            <input type="text" class="form-control" name="city" id="city" required>-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-<!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->
-
-
+<!--{% block content %}-->
+<!--&lt;!&ndash; Modal &ndash;&gt;-->
+<!--<form method="post" novalidate class="form">-->
+<!--  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">-->
+<!--    <div class="modal-dialog modal-dialog-scrollable">-->
+<!--      <div class="modal-content">-->
+<!--        <div class="modal-header">-->
+<!--          <h1 class="modal-title fs-5" id="staticBackdropLabel">Add a new cafe into the database</h1>-->
+<!--          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--        </div>-->
+<!--        <div class="modal-body">-->
+<!--          &lt;!&ndash; This is where our WTForm fields will go &ndash;&gt;-->
+<!--          {{ form.csrf_token() }}-->
+<!--          {{ form_field(form.name) }}-->
+<!--          {{ form_field(form.surname) }}-->
+<!--          {{ form_field(form.patronymic) }}-->
+<!--          {{ form_field(form.group_id) }}-->
+<!--          {{ form_field(form.phone_number) }}-->
+<!--          {{ form_field(form.birthday) }}-->
+<!--          {{ form_field(form.city) }}-->
+<!--        </div>-->
+<!--        <div class="modal-footer">-->
+<!--          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--          {{ render_field(form.submit, class='btn btn-warning') }}-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
 <!--</form>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
+<!--{% endblock %}-->
 
-<form method="post" novalidate class="form">
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Add a new cafe into the database</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- This is where our WTForm fields will go -->
-                    {{ form.csrf_token() }}
-                    {{ render_field(form.name) }}
-                    {{ render_field(form.surname) }}
-                    {{ render_field(form.patronymic) }}
-                    {{ render_field(form.group_id) }}
-                    {{ render_field(form.phone_number) }}
-                    {{ render_field(form.birthday) }}
-                    {{ render_field(form.city) }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    {{ render_field(form.submit, class='btn btn-warning') }}
-                </div>
+
+
+
+
+<div class="modal" id="createModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Создание записи</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="createForm" action="/create-student" method="POST">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-2 col-form-label mt-2">Имя</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" id="name" required>
+                        </div>
+                        <label for="surname" class="col-sm-2 col-form-label mt-2">Фамилия</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="surname" id="surname" required>
+                        </div>
+                        <label for="patronymic" class="col-sm-2 col-form-label mt-2">Отчество</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="patronymic" id="patronymic" required>
+                        </div>
+                        <label for="group_id" class="col-sm-2 col-form-label mt-2">Группа(id)</label>
+                        <div class="col-sm-10">
+                            <select id="group_id" class="form-control" name="group_id">
+                                {% for group in groups %}
+                                <option value="{{ group.group_id }}">{{ group.group_id }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <label for="phone_number" class="col-sm-2 col-form-label mt-2">Телефон</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="phone_number" id="phone_number" required>
+                        </div>
+                        <label for="email" class="col-sm-2 col-form-label mt-2">Email</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="email" id="email" required>
+                        </div>
+                        <label for="birthday" class="col-sm-2 col-form-label mt-2">Др</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="birthday" id="birthday" required>
+                        </div>
+                        <label for="city" class="col-sm-2 col-form-label mt-2">Город</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="city" id="city" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
             </div>
         </div>
     </div>
-</form>
-{% endblock %}
+</div>

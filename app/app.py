@@ -43,7 +43,7 @@ def create_student():
     # form = CreateStudentForm()
     #
     # if form.validate_on_submit():
-    #     new_student = Student(
+    #     student = Student(
     #         name=form.name.data,
     #         surname=form.surname.data,
     #         patronymic=form.patronymic.data,
@@ -53,8 +53,8 @@ def create_student():
     #         birthday=form.birthday.data,
     #         city=form.city.data,
     #     )
-
-        # form.group_id.choices = [group.group_id for group in Group.query.all()]
+    #
+    #     form.group_id.choices = [gr.group_id for gr in Group.query.all()]
 
         name = request.form.get("name")
         surname = request.form.get("surname")
@@ -75,6 +75,8 @@ def create_student():
 
         except Exception as e:
             return jsonify({'error': str(e)}), 400
+
+
 
 
 @app.route("/students/update/<int:stud_id>", methods=['POST'])
