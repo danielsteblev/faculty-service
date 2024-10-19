@@ -1,0 +1,118 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto", sans-serif;
+    font-style:normal;
+}
+
+.top-menu li{
+    display: inline-block;
+}
+
+.top-menu a{
+    margin: 20px;
+    text-decoration: none;
+    font-size: 15px;
+    padding: 10px;
+    color: #495057;
+}
+
+.top-menu a:hover {
+    border-bottom: 1px solid #495057;
+}
+
+.top-menu a:active {
+    border-bottom: 1px solid red;
+}
+
+.add{
+    padding-right: 15%;
+    text-align: right;
+}
+
+.btn-add{
+  background-color: #007bff;
+  border: 1px;
+  border-radius: 3px;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 13px;
+  margin: 4px 2px;
+  opacity: 0.6;
+  transition: 0.3s;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-add:hover {opacity: 1}}
+
+.form-control {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color:#495057;
+    background-color: #fff;
+
+}
+
+tr{
+    border: 1px solid #bbc3cc;
+    cursor: pointer;
+}
+
+tr:nth-child(odd){
+    background-color: #dee2e6;
+}
+
+tr:hover {
+    background: #bbc3cc;
+}
+
+table{
+    width: 95%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+form-control{
+    max-width: 100px;
+}
+
+/* Менюшка
+*/
+
+
+.menu_mobile {
+  position: fixed;
+  display: block;
+  width: 20%;
+  height: 100%;
+  left: -100%;
+  top: 0;
+  z-index: 1;
+  background: blue;
+  transition: left 1s 1s;
+}
+
+.menu_mobile.active {
+  left: 0;
+  transition: left 1s;
+}
+
+.close-menu {
+  transform: scale(0);
+  transition: transform 1s;
+}
+
+.close-menu-active {
+  transform: scale(1);
+  transition: transform 1s 1s;
+}
+
+
+.custom-mark {
+    width: 70px;
+}
+

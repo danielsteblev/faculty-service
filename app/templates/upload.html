@@ -1,0 +1,28 @@
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <title>Обработка рукописной таблицы</title>
+   </head>
+   <body>
+       <form method="post" enctype="multipart/form-data">
+           <input type="file" name="file">
+           <button type="submit">Загрузить и обработать</button>
+       </form>
+       {% if data %}
+           <table border="1">
+               {% for key, values in data.items() %}
+                   <tr>
+                       <td>{{ key }}</td>
+                       {% for value in values %}
+                           <td><img src="data:image/png;base64, {{ value.tobytes().hex() }}" alt="" width="200"></td>
+                       {% endfor %}
+                   </tr>
+               {% endfor %}
+           </table>
+       {% else %}
+           <p>Нет данных для отображения.</p>
+       {% endif %}
+   </body>
+   </html>
+

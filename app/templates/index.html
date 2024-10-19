@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <title>Программа учета факультета</title>
+    <header>
+        <div class="header-menu">
+            <div class="top-menu">
+                <ul>
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/students">Списки студентов</a></li>
+                    <li><a href="/lecturers">Списки преподавателей</a></li>
+                    <li><a href="/statements">Ведомости</a></li>
+                    <li><a href="#">О компании</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+</head>
+<body>
+
+<button>меню</button>
+<div class="menu_mobile">
+    <button class="close-menu">X</button>
+    <ul>
+        <li><a href="/">Главная</a></li>
+        <li><a href="/students">Списки студентов</a></li>
+        <li><a href="/lecturers">Списки преподавателей</a></li>
+        <li><a href="/statements">Ведомости</a></li>
+        <li><a href="#">О компании</a></li>
+    </ul>
+
+</div>
+
+
+<h1>Здесь будет меню...</h1>
+
+<script>
+    // тут мы вешаем на кнопку МЕНЮ событие которое при клике на кнопку
+// добавляет menu_mobile некий класс, в данном случае это active
+
+document.querySelector('button').addEventListener('click', () => {
+  document.querySelector('.menu_mobile').classList.add('active');
+  document.querySelector('.close-menu').classList.add('close-menu-active');
+})
+// а тут мы вешаем на кнопку close-menu событие которое пр кликена кнопку
+// удаляет menu_mobile  класс  active
+
+document.querySelector('.close-menu').addEventListener('click', () => {
+  document.querySelector('.menu_mobile').classList.remove('active');
+  document.querySelector('.close-menu').classList.remove('close-menu-active')
+})
+</script>
+</body>
+</html>

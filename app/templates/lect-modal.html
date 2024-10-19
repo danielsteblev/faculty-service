@@ -1,0 +1,49 @@
+<div class="modal" id="recordModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Обновление записи</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="updateForm" action="/lecturers/update/{id}" method="POST">
+                    <div class="form-group row">
+                        <label for="lecturer_id" class="col-sm-2 col-form-label mt-2">ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="lecturer_id" id="lecturer_id" readonly>
+                        </div>
+                        <label for="name" class="col-sm-2 col-form-label mt-2">Имя</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" id="name" required>
+                        </div>
+                        <label for="surname" class="col-sm-2 col-form-label mt-2">Фамилия</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="surname" id="surname" required>
+                        </div>
+                        <label for="patronymic" class="col-sm-2 col-form-label mt-2">Отчество</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="patronymic" id="patronymic" required>
+                        </div>
+                        <label for="phone_number" class="col-sm-2 col-form-label mt-2">Телефон</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="phone_number" id="phone_number" required>
+                        </div>
+                        <label for="email" class="col-sm-2 col-form-label mt-2">Email</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="email" id="email" required>
+                        </div>
+                        <label for="position" class="col-sm-2 col-form-label mt-2">Должность</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="position" id="position" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-danger" id="deleteButton"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

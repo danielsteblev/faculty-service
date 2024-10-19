@@ -1,0 +1,57 @@
+<div class="modal" id="createModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Создание занятия</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="createForm" action="/create-statement" method="POST">
+                    <div class="form-group row">
+
+                        <label for="group_id" class="col-sm-2 col-form-label mt-2">Группа(id)</label>
+                        <div class="col-sm-10">
+                            <select id="group_id" class="form-control" name="group_id">
+                                {% for group in groups %}
+                                <option value="{{ group.group_id }}">{{ group.group_id }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <label for="date" class="col-sm-2 col-form-label mt-2">Дата</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" name="date" id="date" required>
+                        </div>
+
+                        <label for="discipline_id" class="col-sm-2 col-form-label mt-2">Дисциплина</label>
+                        <select id="discipline_id" class="form-control" name="discipline_id">
+                            {% for discipline in disciplines %}
+                            <option value="{{ discipline.discipline_id }}"> {{ discipline.name }} </option>
+                            {% endfor %}
+                        </select>
+
+
+                        <label for="lesson_type" class="col-sm-2 col-form-label mt-2">Тип занятия</label>
+                        <select id="lesson_type" class="form-control" name="lesson_type">
+                            {% for type in types %}
+                            <option value="{{ type.type }}">{{ type.type }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="lesson_form" class="col-sm-2 col-form-label mt-2">Форма занятия</label>
+                        <select id="lesson_form" class="form-control" name="lesson_form">
+                            {% for form in forms %}
+                            <option value="{{ form.type }}">{{ form.type }}</option>
+                            {% endfor %}
+                        </select>
+
+                    </div>
+
+                    <button id="createButton" type="submit" class="btn btn-primary">Создать</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
