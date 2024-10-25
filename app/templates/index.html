@@ -32,29 +32,33 @@
         <li><a href="/students">Списки студентов</a></li>
         <li><a href="/lecturers">Списки преподавателей</a></li>
         <li><a href="/statements">Ведомости</a></li>
-        <li><a href="#">О компании</a></li>
+        <li><a href="/personal">Личный кабинет</a></li>
     </ul>
 
 </div>
 
 
-<h1>Здесь будет меню...</h1>
+<a href="/teachers">View all Teachers</a> (Access: Admin)<br><br>
+<a href="/staff">View all Staff</a> (Access: Admin, Teacher)<br><br>
+<a href="/students">View all Students</a> (Access: Admin, Teacher, Staff)<br><br>
+<a href="/mydetails">View My Details</a> (Access: Admin, Teacher, Staff, Student)
+<br><br>
+<!-- Show only if user is logged in -->
+{% if current_user.is_authenticated %}
+<!-- Show current users email -->
+<b>Current user</b>: {{current_user.email}}
+<!-- Current users roles -->
+| <b>Role</b>: {% for role in current_user.roles%}
+{{role.name}}
+{% endfor %} <br><br>
+<!-- link for logging out -->
+<a href="/logout">Logout</a>
+<!-- Show if user is not logged in -->
+{% else %}
+<a href="/signup">Sign up</a> | <a href="/signin">Sign in</a>
+{% endif %}
+<br><br>
 
-<script>
-    // тут мы вешаем на кнопку МЕНЮ событие которое при клике на кнопку
-// добавляет menu_mobile некий класс, в данном случае это active
 
-document.querySelector('button').addEventListener('click', () => {
-  document.querySelector('.menu_mobile').classList.add('active');
-  document.querySelector('.close-menu').classList.add('close-menu-active');
-})
-// а тут мы вешаем на кнопку close-menu событие которое пр кликена кнопку
-// удаляет menu_mobile  класс  active
-
-document.querySelector('.close-menu').addEventListener('click', () => {
-  document.querySelector('.menu_mobile').classList.remove('active');
-  document.querySelector('.close-menu').classList.remove('close-menu-active')
-})
-</script>
 </body>
 </html>

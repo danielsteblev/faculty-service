@@ -1,21 +1,90 @@
-from tokenize import group
-
-from PIL import Image
-from pytesseract import pytesseract
+from flask_login import LoginManager
+from flask_security import Security, login_user, SQLAlchemySessionUserDatastore, roles_accepted
+from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
-from forms import CreateStudentForm
-from models import StudentInStatement
+from models import StudentInStatement, User, Role
 from models import LessonForm, Discipline
 from models import LessonType
 from models import Student, Lecturer, Group, Statement
 from app_config import app, db
-from flask import Flask, render_template, request, jsonify
+from flask import render_template, request, jsonify
+
+user_datastore = SQLAlchemySessionUserDatastore(db.session, User, Role)
+security = Security(app, user_datastore)
 
 
 @app.route("/")
 def main():
     return render_template("index.html")
+
+
+@app.route("/personal", methods=['GET'])
+def my_personal_info():
+
+    return render_template('personal.html')
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    msg = ""
+    # if the form is submitted
+    if request.method == 'POST':
+        # check if user already exists
+        user = User.query.filter_by(email=request.form['email']).first()
+        msg = ""
+        # if user already exists render the msg
+        if user and user.check_psw(request.form['psw']):
+            msg = "User already exist"
+            # render signup.html if user exists
+            return render_template('signup.html', msg=msg)
+
+        # if user doesn't exist
+
+        # store the user to database
+        user = User(email=request.form['email'], active=1, password=generate_password_hash(request.form['password']))
+        # store the role
+        role = Role.query.filter_by(id=request.form['options']).first()
+        user.roles.append(role)
+
+        # commit the changes to database
+        db.session.add(user)
+        db.session.commit()
+
+        # login the user to the app
+        # this user is current user
+        login_user(user)
+        # redirect to index page
+        return redirect('/students')
+
+    # case other than submitting form, like loading the page itself
+    else:
+        return render_template("signup.html", msg=msg)
+
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    msg = ""
+    if request.method == 'POST':
+        # search user in database
+        user = User.query.filter_by(email=request.form['email']).first()
+        # if exist check password
+        if user:
+            if check_password_hash(user.password, request.form['password']):
+                # if password matches, login the user
+                login_user(user)
+                return redirect('/students')
+            # if password doesn't match
+            else:
+                msg = "Wrong password"
+
+        # if user does not exist
+        else:
+            msg = "User doesn't exist"
+        return render_template('signin.html', msg=msg)
+
+    else:
+        return render_template("signin.html", msg=msg)
 
 
 @app.route("/students")
@@ -65,7 +134,7 @@ def create_student():
         birthday = request.form.get("birthday")
         city = request.form.get("city")
 
-        student = Lecturer(name=name, surname=surname, patronymic=patronymic, group_id=group_id,
+        student = Student(name=name, surname=surname, patronymic=patronymic, group_id=group_id,
                            phone_number=phone_number, email=email, birthday=birthday, city=city)
 
         try:
