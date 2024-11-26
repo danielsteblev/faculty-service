@@ -1,5 +1,3 @@
-from distutils.command.check import check
-
 from flask_security import UserMixin, RoleMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -86,6 +84,9 @@ class StudentInStatement(db.Model):
     mark = db.Column(db.Integer)
     comment = db.Column(db.String(60))
     is_here = db.Column(db.Boolean)
+
+
+
 
 roles_users = db.Table('roles_users',
         db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),

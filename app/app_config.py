@@ -1,8 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_bootstrap import Bootstrap
-from sqlalchemy import create_engine
-
 
 class Config:
     SQLALCHEMY_DATABASE_URI = "postgresql://postgres:1985@localhost/faculty_db"

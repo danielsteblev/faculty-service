@@ -1,3 +1,4 @@
+import flask
 from flask_login import LoginManager
 from flask_security import Security, login_user, SQLAlchemySessionUserDatastore, roles_accepted
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -89,11 +90,11 @@ def signin():
 
 @app.route("/students")
 def get_students():
-    rows = Student.query.order_by(Student.stud_id.asc()).all()
+    students = Student.query.order_by(Student.stud_id.asc()).all()
     # не знаю правильно ли так делать
     # закачиваю группы что выбирать только из тех которые есть
     groups = Group.query.order_by(Group.group_id.asc()).all()
-    return render_template('students.html', rows=rows, groups=groups)
+    return render_template('students.html', rows=students, groups=groups)
 
 
 @app.route("/students/<int:stud_id>/delete", methods=['POST'])
@@ -109,22 +110,6 @@ def delete_student(stud_id):
 
 @app.route("/create-student", methods=["POST"])
 def create_student():
-    # form = CreateStudentForm()
-    #
-    # if form.validate_on_submit():
-    #     student = Student(
-    #         name=form.name.data,
-    #         surname=form.surname.data,
-    #         patronymic=form.patronymic.data,
-    #         group_id=form.group_id.data,
-    #         phone_number=form.phone_number.data,
-    #         email=form.email.data,
-    #         birthday=form.birthday.data,
-    #         city=form.city.data,
-    #     )
-    #
-    #     form.group_id.choices = [gr.group_id for gr in Group.query.all()]
-
         name = request.form.get("name")
         surname = request.form.get("surname")
         patronymic = request.form.get("patronymic")
