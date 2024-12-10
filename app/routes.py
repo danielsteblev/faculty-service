@@ -91,7 +91,8 @@ def student_update(stud_id):
 def get_lecturers(page=1):
     per_page = 20
     # rows = Lecturer.query.get_or_404(Lecturer.lecturer_id.asc()).all()
-    lecturers = Lecturer.query.paginate(page=page, per_page=per_page, error_out=False)
+    lecturers = Lecturer.query.order_by(Lecturer.lecturer_id.asc()).paginate(page=page, per_page=per_page,
+                                                                             error_out=False)
     return render_template('lecturers.html', lecturers=lecturers, page=page, has_next=lecturers.has_next,
                            has_prev=lecturers.has_prev)
 
@@ -122,13 +123,13 @@ def delete_lecturer(lecturer_id):
     try:
         db.session.delete(lecturer)
         db.session.commit()
-        return redirect("/lecturers")
+        return redirect("/lecturers/page=1")
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
 
-@app.route("/lecturers/update/<int:lecturer_id>", methods=['POST'])
+@app.route("/lecturers/lecturers/update/<int:lecturer_id>", methods=['POST'])
 def lecturer_update(lecturer_id):
     lecturer = Lecturer.query.get_or_404(lecturer_id)
 
@@ -141,7 +142,7 @@ def lecturer_update(lecturer_id):
 
     try:
         db.session.commit()
-        return redirect("/lecturers")
+        return redirect("/lecturers/page=1")
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -149,13 +150,18 @@ def lecturer_update(lecturer_id):
 
 @app.route("/statements")
 def get_statements():
-    statements = Statement.query.all()
     types = LessonType.query.all()
     forms = LessonForm.query.all()
     groups = Group.query.order_by(Group.group_id.asc()).all()
     disciplines = Discipline.query.all()
-    return render_template('statements.html', statements=statements,
-                           types=types, forms=forms, groups=groups, disciplines=disciplines)
+    statements = Statement.query.all()
+    # statements = Statement.query.paginate(page=page, per_page=per_page, error_out=False)
+
+    return render_template(
+        'statements.html',
+        statements=statements, types=types,
+        forms=forms, groups=groups, disciplines=disciplines,
+    )
 
 
 @app.route("/create-statement", methods=["POST"])
@@ -273,7 +279,7 @@ def register():
     password2 = request.form.get('password2')
 
     if request.method == 'POST':
-        if not(login or password2 or password):
+        if not (login or password2 or password):
             flash("Введите значения!", 'error')
         elif password != password2:
             flash("Пароли не совпадают!", 'error')
@@ -296,6 +302,7 @@ def logout():
     logout_user()
     return redirect('/students')
 
+
 @app.after_request
 def redirect_to_signin(response):
     if response.status_code == 401:
@@ -306,8 +313,24 @@ def redirect_to_signin(response):
 
 @app.route('/user')
 def user_info():
-    user = Student.query.filter_by(email=current_user.login).first() # получаю себя по своему же login`У
-    return render_template('profile.html', user=user)
+    user = Student.query.filter_by(email=current_user.login).first()  # получаю себя по своему же login`У
+    # Считаю % посещаемости
+    student_in_statements = StudentInStatement.query.filter(StudentInStatement.stud_id == user.stud_id)
+    statements = Statement.query.filter(Statement.statement_id == StudentInStatement.statement_id)
+
+    statements_count = student_in_statements.count()
+
+    statements_is_here = (StudentInStatement.query.filter(StudentInStatement.stud_id == user.stud_id,
+                                                         StudentInStatement.is_here == True)).count()
+
+    print(statements_is_here)
+
+    attendance = round((statements_is_here / statements_count) * 100, 2) if statements_is_here else 0
+
+    print(student_in_statements)
+
+    return render_template('profile.html', user=user,
+                           attendance=attendance, user_in_statements=student_in_statements, statements=statements)
 
 
 def generate_avatar(first_name, last_name):

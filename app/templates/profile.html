@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
 </head>
-<body>
+<body style="background-color: #e3e8e6">
 <div class="header">
     <div class="inner_header">
         <div class="logo_container">
@@ -42,20 +42,97 @@
     </div>
 </div>
 
-<div class="profile_card">
+<h3 class="pr-1">Личный кабинет</h3>
 
+<div class="profile_body">
+
+    <div class="profile_card">
+        <div class="card_header">
+            <img class="profile_avatar" src="{{ url_for('static', filename=current_user.avatar) }}">
+            <h5 class="profile_name">{{ user.name }} {{ user.surname }}</h5>
+        </div>
+        <div class="details-not-item">
+            <span class="span-item">ID</span><br>
+            <span>{{ user.stud_id }}</span>
+        </div>
+        <div class="details-not-item">
+            <span class="span-item">Email</span><br>
+            <span>{{ user.email }}</span>
+        </div>
+        <div class="details-not-item">
+            <span class="span-item">Телефон</span><br>
+            <span>{{ user.phone_number }}</span>
+        </div>
+        <div class="details-not-item">
+            <span class="span-item">Роль</span><br>
+            <span> Студент </span>
+        </div>
+        <div class="details-not-item">
+            <span class="span-item">ID группы</span><br>
+            <span> {{ user.group_id }} </span>
+        </div>
+        <div class="details-not-item">
+            <span class="span-item">Дата рождения</span><br>
+            <span> {{ user.birthday }} </span>
+        </div>
+        <div class="details-not-item">
+            <span class="span-item">% посещаемости</span><br>
+            <span id="score"> {{ attendance }} </span>
+        </div>
+    </div>
+
+    <div class="user_statements">
+        <div class="card_header">
+            <h5 class="profile_name" style="border-bottom: 1px solid #ededed;">Ваши последние занятия</h5>
+        </div>
+        <div class="statement-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Дисциплина</th>
+                    <th>Тип занятия</th>
+                    <th>Форма занятия</th>
+                    <th>Присутствует</th>
+                    <th>Оценка</th>
+                    <th>Комментарий</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for row in user_in_statements %}
+                <tr>
+                    <td>{{row.comment}}</td>
+                    <td class="is_here">{{'+' if row.is_here else '—'}}</td>
+                    <td>{{row.mark}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
-
-<h3>email : {{ user.email }} </h3>
-<h3>email : {{ user.name }} </h3>
-<h3>email : {{ user.surname }} </h3>
-
-<img style="margin-left: 10px" src="{{ url_for('static', filename=current_user.avatar) }}">
 
 
 {% include 'footer.html' %}
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const scoreElement = document.getElementById('score');
+    let scoreValue = parseInt(scoreElement.textContent);
+
+    if (scoreValue > 80) {
+        scoreElement.style.color = 'green';
+    } else if (scoreValue > 50 && scoreValue <= 80) {
+        scoreElement.style.color = 'yellow';
+    } else {
+        scoreElement.style.color = 'red';
+    }
+    });
+</script>
 
 </body>
+
+
 </html>
+

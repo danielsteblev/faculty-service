@@ -58,8 +58,8 @@
     <div class="statement-table">
         <table>
             <thead>
-            <tr style="border-bottom: 6px solid #bbc3cc;">
-                <th>#</th>
+            <tr>
+                <th>ID</th>
                 <th>Группа</th>
                 <th>Дата</th>
                 <th>Дисциплина</th>
@@ -87,6 +87,19 @@
             {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div class="pagination-container">
+        {% if has_prev %}
+        <li class="page-item"><a class="page-link" href="/statements/page={{ page - 1 }}">&#8249;</a></li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">&#8249;</span></li>
+        {% endif %}
+
+        {% if has_next %}
+        <li class="page-item"><a class="page-link" href="/statements/page={{ page + 1 }}">&#8250;</a></li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">&#8250;</span></li>
+        {% endif %}
     </div>
 </div>
 
