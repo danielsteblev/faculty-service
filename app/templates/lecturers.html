@@ -6,14 +6,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
 <div class="header">
     <div class="inner_header">
         <div class="logo_container">
@@ -21,10 +20,10 @@
         </div>
 
         <ul class="navigation">
-            <a href="/students">
+            <a href="/students/page=1">
                 <li>База студентов</li>
             </a>
-            <a href="/lecturers">
+            <a href="/lecturers/page=1">
                 <li>База преподавателей</li>
             </a>
             <a href="/statements">
@@ -42,8 +41,8 @@
     </div>
 </div>
 
-<div class="table_wrapper">
 
+<div class="table_wrapper">
     <div class="add__btn">
         <a class="btn">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
@@ -68,29 +67,43 @@
             </thead>
 
             <tbody>
-            {% for row in rows %}
-            <tr data-id='{{ row.lecturer_id }}'
-                data-name='{{ row.name }}'
-                data-surname='{{ row.surname }}'
-                data-patronymic='{{ row.patronymic }}'
-                data-phone_number="{{ row.phone_number }}"
-                data-email="{{ row.email }}"
-                data-position="{{ row.position }}"
+            {% for lecturer in lecturers %}
+            <tr data-id='{{ lecturer.lecturer_id }}'
+                data-name='{{ lecturer.name }}'
+                data-surname='{{ lecturer.surname }}'
+                data-patronymic='{{ lecturer.patronymic }}'
+                data-phone_number="{{ lecturer.phone_number }}"
+                data-email="{{ lecturer.email }}"
+                data-position="{{ lecturer.position }}"
                 class="lecturer-row">
-                <td>{{row.lecturer_id}}</td>
-                <td>{{row.surname}}</td>
-                <td>{{row.name}}</td>
-                <td>{{row.patronymic}}</td>
-                <td>{{row.phone_number}}</td>
-                <td>{{row.email}}</td>
-                <td>{{row.position}}</td>
+                <td>{{lecturer.lecturer_id}}</td>
+                <td>{{lecturer.surname}}</td>
+                <td>{{lecturer.name}}</td>
+                <td>{{lecturer.patronymic}}</td>
+                <td>{{lecturer.phone_number}}</td>
+                <td>{{lecturer.email}}</td>
+                <td>{{lecturer.position}}</td>
             </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+    <div class="pagination-container">
+        {% if has_prev %}
+        <li class="page-item"><a class="page-link" href="/lecturers/page={{ page - 1 }}">&#8249;</a></li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">&#8249;</span></li>
+        {% endif %}
+
+        {% if has_next %}
+        <li class="page-item"><a class="page-link" href="/lecturers/page={{ page + 1 }}">&#8250;</a></li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">&#8250;</span></li>
+        {% endif %}
+    </div>
 </div>
 
+{% include 'footer.html' %}
 {% include 'lect-modal.html' %}
 
 <script>

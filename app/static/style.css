@@ -35,9 +35,149 @@ form-control{
 .custom-mark {
     width: 70px;
 }
+/* HEADER */
+.header {
+    width: 100%;
+    height: 80px;
+    display: block;
+    background-color: #101010
+}
+
+.inner_header {
+    width: 1300px;
+    height: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+.logo_container {
+    height: 100%;
+    display: table;
+    float: left;
+}
+
+.logo_container h1 {
+    color: pink;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    font-family: 'Montserrat'
+    font-size: 32px;
+    font-weight: 800
+}
+
+.logo_container h1:hover {
+    color: #FF548E;
+}
+
+.navigation {
+    float: right;
+    height: 100%;
+}
+
+.navigation a {
+    text-decoration: none;
+    height: 100%;
+    display: table;
+    float: left;
+    padding: 0px 20px;
+}
+
+.navigation a li {
+    display: table-cell;
+    vertical-align: middle;
+    height: 100%;
+    color: white;
+}
+
+.navigation a li:hover {
+    color: pink;
+}
+
+.avatar_link {
+    margin-left: auto;
+}
+
+.avatar {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/* Таблицы и кнопки */
+
+
+.table_wrapper {
+    width: 85%;
+    overflow: hidden;
+    margin: auto;
+}
+
+table{
+    width: 100%;
+}
+
+.pagination-container {
+    padding-top: 10px;
+    display: flex;
+    float: right;
+    text-decoration: none;
+}
+
+.page-link {
+    text-decoration: none;
+}
+
+.add__btn {
+    flex: 1 1 auto;
+    margin: 20px;
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%);
+    float: right;
+}
+
+.add__btn:hover {
+  background-position: right center; /* change the direction of the change here */
+}
+
+
+
+/*  FOOTER  */
 
 footer{
-    position: absolute;
+    position: relative;
     bottom: 0;
     left: 0;
     right: 0;
@@ -45,7 +185,7 @@ footer{
     height: auto;
     width: 100vw;
     font-family: "Open Sans";
-    padding-top: 40px;
+    margin-top: 10%;
     color: #fff;
 }
 .footer-content{
@@ -107,137 +247,3 @@ footer{
     font-weight: 200;
 }
 
-.table_wrapper {
-    width: 90%;
-    display: block;
-}
-
-
-
-
-
-
-
-.header {
-    width: 100%;
-    height: 80px;
-    display: block;
-    background-color: #101010
-}
-
-.inner_header {
-    width: 1300px;
-    height: 100%;
-    display: block;
-    margin: 0 auto;
-}
-
-.logo_container {
-    height: 100%;
-    display: table;
-    float: left;
-}
-
-.logo_container h1 {
-    color: pink;
-    height: 100%;
-    display: table-cell;
-    vertical-align: middle;
-    font-family: 'Montserrat'
-    font-size: 32px;
-    font-weight: 800
-}
-
-.logo_container h1:hover {
-    color: #FF548E;
-}
-
-.navigation {
-    float: right;
-    height: 100%;
-}
-
-.navigation a {
-    text-decoration: none;
-    height: 100%;
-    display: table;
-    float: left;
-    padding: 0px 20px;
-}
-
-.navigation a li {
-    display: table-cell;
-    vertical-align: middle;
-    height: 100%;
-    color: white;
-}
-
-.navigation a li:hover {
-    color: pink;
-}
-
-
-.avatar_link {
-    margin-left: auto;
-}
-
-.avatar {
-    height: 45px;
-    width: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.tooltip-container {
-    position: relative;
-    display: inline-block;
-}
-
-.tooltip-text {
-    visibility: hidden;
-    background-color: black;
-    color: white;
-    text-align: center;
-    padding: 5px 10px;
-    border-radius: 6px;
-    position: absolute;
-    z-index: 1;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.tooltip-container:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-}
-
-.table_wrapper {
-    overflow: hidden;
-    margin: auto;
-}
-
-table{
-    width: 100%;
-}
-
-
-.add__btn {
-    flex: 1 1 auto;
-    margin: 10px;
-    text-align: center;
-    transition: 0.5s;
-    background-size: 200% auto;
-    color: white;
- /* text-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
-    border-radius: 10px;
-    background-image: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%);
-
-    float: right;
-}
-
-.add__btn:hover {
-  background-position: right center; /* change the direction of the change here */
-}

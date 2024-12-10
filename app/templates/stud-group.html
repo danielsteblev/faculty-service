@@ -14,19 +14,33 @@
           rel="stylesheet">
 </head>
 <body>
-<header>
-    <div class="header-menu">
-        <div class="top-menu">
-            <ul>
-                <li><a href="/">Главная</a></li>
-                <li><a href="/students">Списки студентов</a></li>
-                <li><a href="/lecturers">Списки преподавателей</a></li>
-                <li><a href="/statements">Ведомости</a></li>
-                <li><a href="#">О компании</a></li>
-            </ul>
+<div class="header">
+    <div class="inner_header">
+        <div class="logo_container">
+            <h1>FKNet</h1>
         </div>
+
+        <ul class="navigation">
+            <a href="/students/page=1">
+                <li>База студентов</li>
+            </a>
+            <a href="/lecturers/page=1">
+                <li>База преподавателей</li>
+            </a>
+            <a href="/statements">
+                <li>Ведомости</li>
+            </a>
+            <a href="/user">
+                <li class="avatar_link">
+                    <div class="tooltip-container">
+                        <img src="{{ url_for('static', filename=current_user.avatar) }}" class="avatar">
+                        <span class="tooltip-text">Профиль</span>
+                    </div>
+                </li>
+            </a>
+        </ul>
     </div>
-</header>
+</div>
 
 <div class="container">
     <h4 class="statement_id" id="statement_id" style="visibility: hidden">ID: {{ statement.statement_id }} </h4>
@@ -45,9 +59,7 @@
 </div>
 
 <div id="saveGroup">
-    <button type="submit" class="btn btn-success" style="float: right; margin: 10px; margin-right: 38px;">Сохранить
-        ведомость
-    </button>
+    <a class="add__btn" href="{{ url_for('get_statements') }}">Сохранить ведомость</a>
 </div>
 
 
@@ -94,6 +106,9 @@
         </tbody>
     </table>
 </div>
+
+
+{% include 'footer.html' %}
 
 <script>
     function checkMark() {

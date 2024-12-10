@@ -19,15 +19,18 @@ from flask import render_template, request, jsonify, flash, url_for
 
 @app.route("/")
 def main():
-    return redirect("/students")
+    return redirect("/students/page=1")
 
 
-@app.route("/students")
+@app.route("/students/page=<int:page>")
 @login_required
-def get_students():
-    students = Student.query.order_by(Student.stud_id.asc()).all()
+def get_students(page=1):
+    per_page = 20
+    students = Student.query.paginate(page=page, per_page=per_page, error_out=False)
+    # students = Student.query.order_by(Student.stud_id.asc()).all()
     groups = Group.query.order_by(Group.group_id.asc()).all()
-    return render_template('students.html', rows=students, groups=groups)
+    return render_template('students.html', rows=students, groups=groups, page=page, has_next=students.has_next,
+                           has_prev=students.has_prev)
 
 
 @app.route("/students/<int:stud_id>/delete", methods=['POST'])
@@ -36,12 +39,12 @@ def delete_student(stud_id):
     try:
         db.session.delete(student)
         db.session.commit()
-        return redirect("/students")
+        return redirect("/students/page=1")
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
 
-@app.route("/create-student", methods=["POST"])
+@app.route("/students/create-student", methods=["POST"])
 def create_student():
     name = request.form.get("name")
     surname = request.form.get("surname")
@@ -58,16 +61,15 @@ def create_student():
     try:
         db.session.add(student)
         db.session.commit()
-        return redirect("/students")
+        return redirect("/students/page=1")
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
 
-@app.route("/students/update/<int:stud_id>", methods=['POST'])
+@app.route("/students/students/update/<int:stud_id>", methods=['POST'])
 def student_update(stud_id):
     student = Student.query.get(stud_id)
-
     student.name = request.form['name']
     student.surname = request.form['surname']
     student.patronymic = request.form['patronymic']
@@ -79,16 +81,19 @@ def student_update(stud_id):
 
     try:
         db.session.commit()
-        return redirect("/students")
+        return redirect("/students/page=1")
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
 
-@app.route("/lecturers")
-def get_lecturers():
-    rows = Lecturer.query.order_by(Lecturer.lecturer_id.asc()).all()
-    return render_template('lecturers.html', rows=rows)
+@app.route("/lecturers/page=<int:page>")
+def get_lecturers(page=1):
+    per_page = 20
+    # rows = Lecturer.query.get_or_404(Lecturer.lecturer_id.asc()).all()
+    lecturers = Lecturer.query.paginate(page=page, per_page=per_page, error_out=False)
+    return render_template('lecturers.html', lecturers=lecturers, page=page, has_next=lecturers.has_next,
+                           has_prev=lecturers.has_prev)
 
 
 @app.route("/create-lect", methods=['POST'])
@@ -160,18 +165,11 @@ def create_statement():
     discipline_id = request.form.get("discipline_id")
     lesson_type = request.form.get("lesson_type")
     lesson_form = request.form.get("lesson_form")
-    print(group_id)
-    print(date)
-    print(discipline_id)
-    print(lesson_type)
-    print(lesson_form)
-
     students = Student.query.filter_by(group_id=group_id).all()
     students = sorted(students, key=lambda x: x.surname)
     discipline = Discipline.query.filter_by(discipline_id=discipline_id).all()
     statement = Statement(group_id=group_id, date=date, discipline_id=discipline_id, lesson_type=lesson_type,
                           lesson_form=lesson_form)
-    print(statement)
     try:
         db.session.add(statement)
         db.session.commit()
@@ -235,31 +233,6 @@ def create_stud_lesson():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400
-
-
-@app.route('/create-st', methods=['POST', 'GET'])
-def create_st():
-    form = CreateStudentForm()
-    if request.method == 'POST':
-        # Заполнение полей выбора ID группы из БД
-        if form.validate_on_submit():
-            new_student = Student(
-                name=form.name.data,
-                surname=form.surname.data,
-                patronymic=form.patronymic.data,
-                group_id=form.group_id.data,
-                phone_number=form.phone_number.data,
-                email=form.email.data,
-                birthday=form.birthday.data,
-                city=form.city.data
-            )
-
-        return redirect('/students')  # Перенаправление на страницу успеха
-
-    # Заполнение списка групп
-    form.group_id.choices = [group.group_id for group in Group.query.all()]
-
-    return render_template('create-st.html', form=form)
 
 
 @app.route("/get-student/<int:student_id>")
