@@ -1,94 +1,25 @@
-import flask
-from flask_login import LoginManager
-from flask_security import Security, login_user, SQLAlchemySessionUserDatastore, roles_accepted
-from werkzeug.security import generate_password_hash, check_password_hash
+
+from flask_login import login_user, login_required
+from flask_security import logout_user
+from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import redirect
 
-from models import StudentInStatement, User, Role
-from models import LessonForm, Discipline
+from app.forms import CreateStudentForm
+from models import LessonForm, Discipline, StudentInStatement, User
 from models import LessonType
 from models import Student, Lecturer, Group, Statement
-from app_config import app, db
-from flask import render_template, request, jsonify
 
-user_datastore = SQLAlchemySessionUserDatastore(db.session, User, Role)
-security = Security(app, user_datastore)
+from app_config import app, db
+from flask import render_template, request, jsonify, flash, url_for
 
 
 @app.route("/")
 def main():
-    return render_template("index.html")
-
-
-@app.route("/personal", methods=['GET'])
-def my_personal_info():
-
-    return render_template('personal.html')
-
-
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    msg = ""
-    # if the form is submitted
-    if request.method == 'POST':
-        # check if user already exists
-        user = User.query.filter_by(email=request.form['email']).first()
-        msg = ""
-        # if user already exists render the msg
-        if user and user.check_psw(request.form['psw']):
-            msg = "User already exist"
-            # render signup.html if user exists
-            return render_template('signup.html', msg=msg)
-
-        # if user doesn't exist
-
-        # store the user to database
-        user = User(email=request.form['email'], active=1, password=generate_password_hash(request.form['password']))
-        # store the role
-        role = Role.query.filter_by(id=request.form['options']).first()
-        user.roles.append(role)
-
-        # commit the changes to database
-        db.session.add(user)
-        db.session.commit()
-
-        # login the user to the app
-        # this user is current user
-        login_user(user)
-        # redirect to index page
-        return redirect('/students')
-
-    # case other than submitting form, like loading the page itself
-    else:
-        return render_template("signup.html", msg=msg)
-
-
-@app.route('/signin', methods=['GET', 'POST'])
-def signin():
-    msg = ""
-    if request.method == 'POST':
-        # search user in database
-        user = User.query.filter_by(email=request.form['email']).first()
-        # if exist check password
-        if user:
-            if check_password_hash(user.password, request.form['password']):
-                # if password matches, login the user
-                login_user(user)
-                return redirect('/students')
-            # if password doesn't match
-            else:
-                msg = "Wrong password"
-
-        # if user does not exist
-        else:
-            msg = "User doesn't exist"
-        return render_template('signin.html', msg=msg)
-
-    else:
-        return render_template("signin.html", msg=msg)
+    return redirect("/students")
 
 
 @app.route("/students")
+@login_required
 def get_students():
     students = Student.query.order_by(Student.stud_id.asc()).all()
     # не знаю правильно ли так делать
@@ -110,27 +41,25 @@ def delete_student(stud_id):
 
 @app.route("/create-student", methods=["POST"])
 def create_student():
-        name = request.form.get("name")
-        surname = request.form.get("surname")
-        patronymic = request.form.get("patronymic")
-        group_id = request.form.get("group_id")
-        phone_number = request.form.get("phone_number")
-        email = request.form.get("email")
-        birthday = request.form.get("birthday")
-        city = request.form.get("city")
+    name = request.form.get("name")
+    surname = request.form.get("surname")
+    patronymic = request.form.get("patronymic")
+    group_id = request.form.get("group_id")
+    phone_number = request.form.get("phone_number")
+    email = request.form.get("email")
+    birthday = request.form.get("birthday")
+    city = request.form.get("city")
 
-        student = Student(name=name, surname=surname, patronymic=patronymic, group_id=group_id,
-                           phone_number=phone_number, email=email, birthday=birthday, city=city)
+    student = Student(name=name, surname=surname, patronymic=patronymic, group_id=group_id,
+                      phone_number=phone_number, email=email, birthday=birthday, city=city)
 
-        try:
-            db.session.add(student)
-            db.session.commit()
-            return redirect("/students")
+    try:
+        db.session.add(student)
+        db.session.commit()
+        return redirect("/students")
 
-        except Exception as e:
-            return jsonify({'error': str(e)}), 400
-
-
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 
 @app.route("/students/update/<int:stud_id>", methods=['POST'])
@@ -344,6 +273,65 @@ def get_student(student_id):
         'birthday': student.birthday.isoformat(),  # Форматируем дату
         'city': student.city
     })
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    login = request.form.get('login')
+    password = request.form.get('password')
+    if login and password:
+        user = User.query.filter_by(login=login).first()
+        print(user)
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            next_page = request.args.get('next')
+            return redirect(next_page)
+        else:
+            flash("Неверный логин или пароль.")
+
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    login = request.form.get('login')
+    password = request.form.get('password')
+    password2 = request.form.get('password2')
+
+    if request.method == 'POST':
+        if not(login or password2 or password):
+            flash("Введите значения!", 'error')
+        elif password != password2:
+            flash("Пароли не совпадают!", 'error')
+        else:
+            hash_psw = generate_password_hash(password)
+            new_user = User(login=login, password=hash_psw)
+            db.session.add(new_user)
+            db.session.commit()
+
+            return redirect(url_for('login_page'))
+
+    return render_template('register.html')
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect('/students')
+
+@app.after_request
+def redirect_to_signin(response):
+    if response.status_code == 401:
+        return redirect(url_for('login_page') + '?next=' + request.url)
+
+    return response
+
+
+@app.route('/profile/<string:email>')
+def user_info(email):
+    user = Student.query.filter_by(email=email).first()
+    print(user)
 
 
 if __name__ == "__main__":

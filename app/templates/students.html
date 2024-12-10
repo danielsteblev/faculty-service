@@ -14,19 +14,31 @@
           rel="stylesheet">
 </head>
 <body>
-<header>
-    <div class="header-menu">
-        <div class="top-menu">
-            <ul>
-                <li><a href="/">Главная</a></li>
-                <li><a href="/students">Списки студентов</a></li>
-                <li><a href="/lecturers">Списки преподавателей</a></li>
-                <li><a href="/statements">Ведомости</a></li>
-                <li><a href="#">О компании</a></li>
-            </ul>
-        </div>
+<header class="new-header">
+    <div class="new-header-wrapper">
+        <ul>
+            <li class="menu__list-item">
+                <a class="nav-item" href="/">Главная</a>
+            </li>
+            <li class="menu__list-item">
+                <a class="nav-item" href="/students">Списки студентов</a>
+            </li>
+            <li class="menu__list-item">
+                <a class="nav-item" href="/lecturers">Списки преподавателей</a>
+            </li>
+            <li class="menu__list-item">
+                <a class="nav-item" href="/statements">Ведомости</a>
+            </li>
+            <li class="menu__list-item">
+                <a class="nav-item" href="#">О компании</a>
+            </li>
+        </ul>
+    </div>
     </div>
 </header>
+
+
+<h1>Здравствуйте, {{current_user.login}}</h1>
 
 <div id="addStudentButton">
     <button type="submit" class="btn btn-success" style="float: right; margin: 10px; margin-right: 38px;">
@@ -37,9 +49,6 @@
         студента
     </button>
 </div>
-
-<!--<a class="create-modal-opener" data-toggle="modal"-->
-<!--                            data-whatever="{{ url_for('create_student') }}" href="#">Создать</a>-->
 
 <div class="stud-table">
     <table>
@@ -83,6 +92,7 @@
         </tbody>
     </table>
 </div>
+
 
 {% include 'modal/studentUpdateModal.html' %}
 {% include 'modal/studentCreateModal.html' %}

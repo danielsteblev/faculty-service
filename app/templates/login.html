@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %}
+<div style="color: red;">{{ message }}</div>
+{% endfor %}
+{% endwith %}
+
+<form method="POST">
+    <div class="register-form-container">
+        <h1 class="form-title">
+            Вход в учебный аккаунт
+        </h1>
+        <tr>
+            <td>Login</td>
+            <td><input type="text" name="login"></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="password"></td>
+        </tr>
+        <tr>
+            <td><a class="login_register_down" href="{{ url_for('register') }}">Регистрация</a></td>
+            <td><input type="submit" value="Вход"></td>
+        </tr>
+    </div>
+</form>
+
+{% include 'footer.html' %}
+
+</body>
+</html>

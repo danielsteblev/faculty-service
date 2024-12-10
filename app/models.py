@@ -1,7 +1,6 @@
-from flask_security import UserMixin, RoleMixin
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
-from app_config import db
+from app_config import db, login_manager
 
 # класс студент
 
@@ -86,31 +85,12 @@ class StudentInStatement(db.Model):
     is_here = db.Column(db.Boolean)
 
 
-
-
-roles_users = db.Table('roles_users',
-        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
-
-# create table in database for storing users
+# Модель пользователя для регистрации
 class User(db.Model, UserMixin):
-    tablename = 'user'
-    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    email = db.Column(db.String, unique=True)
-    password = db.Column(db.String(255), nullable=False, server_default='')
-    active = db.Column(db.Boolean())
-    # backreferences the user_id from roles_users table
-    roles = db.relationship('Role', secondary=roles_users, backref='roled')
-    fs_uniquifier = db.Column(db.String(255), unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+    login = db.Column(db.String(128), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
 
-    def set_psw(self, psw):
-        self.password = generate_password_hash(psw)
-
-    def check_psw(self, psw):
-        return check_password_hash(self.password, psw)
-
-# create table in database for storing roles
-class Role(db.Model, RoleMixin):
-    tablename = 'role'
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
