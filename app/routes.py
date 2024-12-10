@@ -1,6 +1,10 @@
+import os
+from random import randint
 
-from flask_login import login_user, login_required
+from PIL import ImageFont, Image, ImageDraw
+from flask_login import login_user, login_required, current_user
 from flask_security import logout_user
+from sqlalchemy.sql.functions import random
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import redirect
 
@@ -22,8 +26,6 @@ def main():
 @login_required
 def get_students():
     students = Student.query.order_by(Student.stud_id.asc()).all()
-    # не знаю правильно ли так делать
-    # закачиваю группы что выбирать только из тех которые есть
     groups = Group.query.order_by(Group.group_id.asc()).all()
     return render_template('students.html', rows=students, groups=groups)
 
@@ -281,7 +283,6 @@ def login_page():
     password = request.form.get('password')
     if login and password:
         user = User.query.filter_by(login=login).first()
-        print(user)
         if user and check_password_hash(user.password, password):
             login_user(user)
             next_page = request.args.get('next')
@@ -305,7 +306,9 @@ def register():
             flash("Пароли не совпадают!", 'error')
         else:
             hash_psw = generate_password_hash(password)
-            new_user = User(login=login, password=hash_psw)
+            local_user = Student.query.filter_by(email=login).first()  # получаю себя по своему же login`У\
+            avatar = generate_avatar(local_user.name, local_user.surname)
+            new_user = User(login=login, password=hash_psw, avatar=avatar)
             db.session.add(new_user)
             db.session.commit()
 
@@ -328,10 +331,47 @@ def redirect_to_signin(response):
     return response
 
 
-@app.route('/profile/<string:email>')
-def user_info(email):
-    user = Student.query.filter_by(email=email).first()
-    print(user)
+@app.route('/user')
+def user_info():
+    user = Student.query.filter_by(email=current_user.login).first() # получаю себя по своему же login`У
+    return render_template('profile.html', user=user)
+
+
+def generate_avatar(first_name, last_name):
+    # Размер аватарки
+    size = 256
+
+    # Цвет фона
+    background_color = (randint(0, 220), randint(0, 220), randint(0, 220))
+
+    # Цвет текста
+    text_color = (0, 0, 0)
+
+    # Шрифт
+    font_size = int(size * 0.35)
+    font_path = os.path.join(os.path.dirname(__file__), 'fonts', 'arial.ttf')
+    font = ImageFont.truetype(font_path, font_size)
+
+    # Создаем изображение
+    image = Image.new('RGB', (size, size), color=background_color)
+    draw = ImageDraw.Draw(image)
+
+    # Определяем первую букву имени и фамилии
+    initials = first_name[0].upper() + last_name[0].upper()
+
+    # Размещаем текст по центру
+    w, h = draw.textbbox((0, 0), initials, font=font)[2:]
+    x = (size - w) / 2
+    y = (size - h) / 2
+
+    # Рисуем текст
+    draw.text((x, y), initials, fill=text_color, font=font)
+
+    # Сохраняем изображение
+    filename = f'{first_name}_{last_name}.png'.lower()
+    image.save(os.path.join('static', filename))
+
+    return filename
 
 
 if __name__ == "__main__":

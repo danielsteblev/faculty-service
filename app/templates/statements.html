@@ -15,57 +15,79 @@
 </head>
 <body>
 
-<header>
-    <div class="header-menu">
-        <div class="top-menu">
-            <ul>
-                <li><a href="/">Главная</a></li>
-                <li><a href="/students">Списки студентов</a></li>
-                <li><a href="/lecturers">Списки преподавателей</a></li>
-                <li><a href="/statements">Ведомости</a></li>
-                <li><a href="#">О компании</a></li>
-            </ul>
+<div class="header">
+    <div class="inner_header">
+        <div class="logo_container">
+            <h1>FKNet</h1>
         </div>
-    </div>
-</header>
 
-<div id="createStatementButton">
-    <button type="submit" class="btn btn-success" style="float: right; margin: 10px; margin-right: 38px;"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h240v80H200v560h560v-240h80v240q0 33-23.5 56.5T760-120H200Zm440-400v-120H520v-80h120v-120h80v120h120v80H720v120h-80Z"/></svg> Создать занятие
-    </button>
+        <ul class="navigation">
+            <a href="/students">
+                <li>База студентов</li>
+            </a>
+            <a href="/lecturers">
+                <li>База преподавателей</li>
+            </a>
+            <a href="/statements">
+                <li>Ведомости</li>
+            </a>
+            <a href="/user">
+                <li class="avatar_link">
+                    <div class="tooltip-container">
+                        <img src="{{ url_for('static', filename=current_user.avatar) }}" class="avatar">
+                        <span class="tooltip-text">Профиль</span>
+                    </div>
+                </li>
+            </a>
+        </ul>
+    </div>
 </div>
 
-<div class="statement-table">
-    <table>
-        <thead>
-        <tr style="border-bottom: 6px solid #bbc3cc;">
-            <th>#</th>
-            <th>Группа</th>
-            <th>Дата</th>
-            <th>Дисциплина</th>
-            <th>Тип занятия</th>
-            <th>Форма занятия</th>
-        </tr>
-        </thead>
 
-        <tbody>
-        {% for statement in statements %}
-        <tr data-id='{{ statement.statement_id }}'
-            data-group_id='{{ statement.group_id }}'
-            data-date='{{ statement.date }}'
-            data-discipline_id='{{ statement.discipline_id }}'
-            data-lesson_type='{{ statement.lesson_type }}'
-            data-lesson_form='{{ statement.lesson_form }}'
-            class="statement-row">
-            <td>{{statement.statement_id}}</td>
-            <td>{{statement.group_id}}</td>
-            <td>{{statement.date}}</td>
-            <td>{{statement.discipline_id}}</td>
-            <td>{{statement.lesson_type}}</td>
-            <td>{{statement.lesson_form}}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="table_wrapper">
+
+    <div class="add__btn" id="createStatementButton">
+        <a class="btn">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h240v80H200v560h560v-240h80v240q0 33-23.5 56.5T760-120H200Zm440-400v-120H520v-80h120v-120h80v120h120v80H720v120h-80Z"/>
+            </svg>
+            Создать занятие
+        </a>
+    </div>
+
+    <div class="statement-table">
+        <table>
+            <thead>
+            <tr style="border-bottom: 6px solid #bbc3cc;">
+                <th>#</th>
+                <th>Группа</th>
+                <th>Дата</th>
+                <th>Дисциплина</th>
+                <th>Тип занятия</th>
+                <th>Форма занятия</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for statement in statements %}
+            <tr data-id='{{ statement.statement_id }}'
+                data-group_id='{{ statement.group_id }}'
+                data-date='{{ statement.date }}'
+                data-discipline_id='{{ statement.discipline_id }}'
+                data-lesson_type='{{ statement.lesson_type }}'
+                data-lesson_form='{{ statement.lesson_form }}'
+                class="statement-row">
+                <td>{{statement.statement_id}}</td>
+                <td>{{statement.group_id}}</td>
+                <td>{{statement.date}}</td>
+                <td>{{statement.discipline_id}}</td>
+                <td>{{statement.lesson_type}}</td>
+                <td>{{statement.lesson_form}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% include 'modal/statementUpdateModal.html' %}

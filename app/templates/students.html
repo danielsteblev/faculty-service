@@ -14,83 +14,88 @@
           rel="stylesheet">
 </head>
 <body>
-<header class="new-header">
-    <div class="new-header-wrapper">
-        <ul>
-            <li class="menu__list-item">
-                <a class="nav-item" href="/">Главная</a>
-            </li>
-            <li class="menu__list-item">
-                <a class="nav-item" href="/students">Списки студентов</a>
-            </li>
-            <li class="menu__list-item">
-                <a class="nav-item" href="/lecturers">Списки преподавателей</a>
-            </li>
-            <li class="menu__list-item">
-                <a class="nav-item" href="/statements">Ведомости</a>
-            </li>
-            <li class="menu__list-item">
-                <a class="nav-item" href="#">О компании</a>
-            </li>
+
+<div class="header">
+    <div class="inner_header">
+        <div class="logo_container">
+            <h1>FKNet</h1>
+        </div>
+
+        <ul class="navigation">
+            <a href="/students">
+                <li>База студентов</li>
+            </a>
+            <a href="/lecturers">
+                <li>База преподавателей</li>
+            </a>
+            <a href="/statements">
+                <li>Ведомости</li>
+            </a>
+            <a href="/user">
+                <li class="avatar_link">
+                    <div class="tooltip-container">
+                        <img src="{{ url_for('static', filename=current_user.avatar) }}" class="avatar">
+                        <span class="tooltip-text">Профиль</span>
+                    </div>
+                </li>
+            </a>
         </ul>
     </div>
-    </div>
-</header>
-
-
-<h1>Здравствуйте, {{current_user.login}}</h1>
-
-<div id="addStudentButton">
-    <button type="submit" class="btn btn-success" style="float: right; margin: 10px; margin-right: 38px;">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-            <path d="M720-400v-120H600v-80h120v-120h80v120h120v80H800v120h-80Zm-360-80q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z"/>
-        </svg>
-        Добавить
-        студента
-    </button>
 </div>
 
-<div class="stud-table">
-    <table>
-        <thead>
-        <tr style="border-bottom: 6px solid #bbc3cc;">
-            <th>id</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Отчество</th>
-            <th>ID группы</th>
-            <th>Номер телефона</th>
-            <th>Email</th>
-            <th>Дата рождения</th>
-            <th>Город</th>
-        </tr>
-        </thead>
+<div class="table_wrapper">
 
-        <tbody>
-        {% for row in rows %}
-        <tr data-id='{{ row.stud_id }}'
-            data-name='{{ row.name }}'
-            data-surname='{{ row.surname }}'
-            data-patronymic='{{ row.patronymic }}'
-            data-group_id="{{ row.group_id }}"
-            data-phone_number="{{ row.phone_number }}"
-            data-email="{{ row.email }}"
-            data-birthday="{{ row.birthday }}"
-            data-city="{{ row.city }}"
-            class="stud-row">
-            <td>{{row.stud_id}}</td>
-            <td>{{row.name}}</td>
-            <td>{{row.surname}}</td>
-            <td>{{row.patronymic}}</td>
-            <td>{{row.group_id}}</td>
-            <td>{{row.phone_number}}</td>
-            <td>{{row.email}}</td>
-            <td>{{row.birthday}}</td>
-            <td>{{row.city}}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="add__btn" id="addStudentButton">
+        <a class="btn">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path d="M720-400v-120H600v-80h120v-120h80v120h120v80H800v120h-80Zm-360-80q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0-80Zm0 400Z"/>
+            </svg>
+            Добавить студента
+        </a>
+    </div>
+
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Отчество</th>
+                <th>ID группы</th>
+                <th>Номер телефона</th>
+                <th>Email</th>
+                <th>Дата рождения</th>
+                <th>Город</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for row in rows %}
+            <tr data-id='{{ row.stud_id }}'
+                data-name='{{ row.name }}'
+                data-surname='{{ row.surname }}'
+                data-patronymic='{{ row.patronymic }}'
+                data-group_id="{{ row.group_id }}"
+                data-phone_number="{{ row.phone_number }}"
+                data-email="{{ row.email }}"
+                data-birthday="{{ row.birthday }}"
+                data-city="{{ row.city }}"
+                class="stud-row">
+                <td>{{row.stud_id}}</td>
+                <td>{{row.name}}</td>
+                <td>{{row.surname}}</td>
+                <td>{{row.patronymic}}</td>
+                <td>{{row.group_id}}</td>
+                <td>{{row.phone_number}}</td>
+                <td>{{row.email}}</td>
+                <td>{{row.birthday}}</td>
+                <td>{{row.city}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 
