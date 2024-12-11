@@ -138,9 +138,9 @@
     document.addEventListener('DOMContentLoaded', function () {
     const scoreElement = document.getElementById('score');
     let scoreValue = parseInt(scoreElement.textContent);
-    if (scoreValue > 80) {
+    if (scoreValue >= 70) {
         scoreElement.style.color = 'green';
-    } else if (scoreValue > 50 && scoreValue <= 80) {
+    } else if (scoreValue > 50 && scoreValue < 70) {
         scoreElement.style.color = 'yellow';
     } else {
         scoreElement.style.color = 'red';
