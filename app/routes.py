@@ -26,7 +26,7 @@ def main():
 @login_required
 def get_students(page=1):
     per_page = 20
-    students = Student.query.paginate(page=page, per_page=per_page, error_out=False)
+    students = Student.query.order_by(Student.stud_id).paginate(page=page, per_page=per_page, error_out=False)
     # students = Student.query.order_by(Student.stud_id.asc()).all()
     groups = Group.query.order_by(Group.group_id.asc()).all()
     return render_template('students.html', rows=students, groups=groups, page=page, has_next=students.has_next,
@@ -278,7 +278,7 @@ def login_page():
         if user and check_password_hash(user.password, password):
             login_user(user)
             next_page = request.args.get('next')
-            return redirect(next_page)
+            return redirect('/students/page=1')
         else:
             flash("Неверный логин или пароль.")
 
@@ -306,7 +306,7 @@ def register():
 
             return redirect(url_for('login_page'))
 
-    return render_template('register.html')
+    return render_template('login.html')
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -314,7 +314,6 @@ def register():
 def logout():
     logout_user()
     return redirect('/students/page=1')
-
 
 @app.after_request
 def redirect_to_signin(response):

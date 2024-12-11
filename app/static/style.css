@@ -7,8 +7,6 @@
     list-style: none;
 }
 
-
-
 .form-control {
     font-size: 1rem;
     font-weight: 400;
@@ -33,7 +31,11 @@ form-control{
 .custom-mark {
     width: 70px;
 }
+
+
 /* HEADER */
+
+
 .header {
     width: 100%;
     height: 80px;
@@ -127,6 +129,10 @@ form-control{
 .tooltip-container:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
+}
+
+.tooltip-container a:hover {
+    text-color: pink;
 }
 
 
@@ -276,7 +282,6 @@ table{
     position: absolute;
     bottom: 0;
     right: 0;
-
 }
 
 
@@ -352,6 +357,8 @@ footer{
     opacity: .4;
     font-weight: 200;
 }
+
+
 
 
 

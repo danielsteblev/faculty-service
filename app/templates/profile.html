@@ -34,7 +34,7 @@
                 <li class="avatar_link">
                     <div class="tooltip-container">
                         <img src="{{ url_for('static', filename=current_user.avatar) }}" class="avatar">
-                        <span class="tooltip-text">Профиль</span>
+                        <span id='logout_span' class="tooltip-text">Выход</span>
                     </div>
                 </li>
             </a>
@@ -113,7 +113,8 @@
                         <span class="checkbox unchecked">✗</span>
                         {% endif %}
                     </td>
-                    <td style="font-weight: 500; text-align: center;" class="{% if row.mark >= 45 %}mark-green{% elif row.mark >= 35 %}mark-blue{% elif row.mark >= 25 %}mark-yellow{% elif row.mark > 0 %}mark-red{% else %}mark-gray{% endif %}">
+                    <td style="font-weight: 500; text-align: center;"
+                        class="{% if row.mark >= 45 %}mark-green{% elif row.mark >= 35 %}mark-blue{% elif row.mark >= 25 %}mark-yellow{% elif row.mark > 0 %}mark-red{% else %}mark-gray{% endif %}">
                         {{ row.mark }}
                     </td>
                     <td>{{row.comment}}</td>
@@ -123,7 +124,8 @@
             </table>
         </div>
         <div class="average_mark">
-            Cредняя оценка: <span style="padding: 2px;" class="{% if average_mark >= 45 %}mark-green{% elif average_mark >= 35 %}mark-blue{% elif average_mark >= 25 %}mark-yellow{% elif average_mark > 0 %}mark-red{% else %}mark-gray{% endif %}">{{ average_mark }}</span>
+            Cредний балл: <span style="padding: 2px;"
+                                  class="{% if average_mark >= 45 %}mark-green{% elif average_mark >= 35 %}mark-blue{% elif average_mark >= 25 %}mark-yellow{% elif average_mark > 0 %}mark-red{% else %}mark-gray{% endif %}">{{ average_mark }}</span>
         </div>
     </div>
 </div>
@@ -132,10 +134,10 @@
 {% include 'footer.html' %}
 
 <script>
+
     document.addEventListener('DOMContentLoaded', function () {
     const scoreElement = document.getElementById('score');
     let scoreValue = parseInt(scoreElement.textContent);
-
     if (scoreValue > 80) {
         scoreElement.style.color = 'green';
     } else if (scoreValue > 50 && scoreValue <= 80) {
@@ -143,7 +145,16 @@
     } else {
         scoreElement.style.color = 'red';
     }
+
+    const logoutSpan = document.getElementById("logout_span");
+        if (logoutSpan) {
+            logoutSpan.addEventListener("click", function (event) {
+                event.preventDefault(); // Отменяем стандартное поведение ссылки
+                window.location.href = "/logout"; // Переходим на страницу выхода
+            });
+        }
     });
+
 </script>
 
 </body>

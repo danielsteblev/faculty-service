@@ -33,7 +33,7 @@
                 <li class="avatar_link">
                     <div class="tooltip-container">
                         <img src="{{ url_for('static', filename=current_user.avatar) }}" class="avatar">
-                        <span class="tooltip-text">Профиль</span>
+                        <span id='logout_span' class="tooltip-text">Выход</span>
                     </div>
                 </li>
             </a>
@@ -149,6 +149,16 @@
         });
        }
     });
+
+
+    const logoutSpan = document.getElementById("logout_span");
+        if (logoutSpan) {
+            logoutSpan.addEventListener("click", function (event) {
+                event.preventDefault(); // Отменяем стандартное поведение ссылки
+                window.location.href = "/logout"; // Переходим на страницу выхода
+            });
+        }
+
 
 });
 </script>
