@@ -419,7 +419,7 @@ def user_info():
 
     return render_template('profile.html', user=user,
                            attendance=attendance, user_in_statements=student_in_statements,
-                           statements=results, average_mark=average_mark)
+                           statements=results, average_mark=average_mark, count=statements_count, is_here_count=statements_is_here)
 
 
 def generate_avatar(first_name, last_name):

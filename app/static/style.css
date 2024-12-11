@@ -297,11 +297,16 @@ table{
   .mark-blue { background-color: #168aad; }
 
 
-.average_mark {
+.statistic {
+    display: flex;
     padding: 10px;
     position: absolute;
     bottom: 0;
     right: 0;
+}
+
+.st-item {
+    padding: 10px;
 }
 
 

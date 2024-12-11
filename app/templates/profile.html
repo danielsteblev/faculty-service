@@ -123,9 +123,17 @@
                 </tbody>
             </table>
         </div>
-        <div class="average_mark">
-            Cредний балл: <span style="padding: 2px;"
-                                  class="{% if average_mark >= 45 %}mark-green{% elif average_mark >= 35 %}mark-blue{% elif average_mark >= 25 %}mark-yellow{% elif average_mark > 0 %}mark-red{% else %}mark-gray{% endif %}">{{ average_mark }}</span>
+        <div class="statistic">
+            <div class="st-item">
+                Cредний балл: <span style="padding: 2px; font-weight: 600;"
+                                    class="{% if average_mark >= 45 %}mark-green{% elif average_mark >= 35 %}mark-blue{% elif average_mark >= 25 %}mark-yellow{% elif average_mark > 0 %}mark-red{% else %}mark-gray{% endif %}">{{ average_mark }}</span>
+            </div>
+            <div class="st-item">
+                Всего занятий:<span style="background-color: grey; padding: 3px; font-weight: 600;"> {{ count }} </span>
+            </div>
+            <div class="st-item">
+                Посещённых занятий: <span style="background-color: grey; padding: 3px; font-weight: 600"> {{ is_here_count }} </span>
+            </div>
         </div>
     </div>
 </div>
