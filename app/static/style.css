@@ -22,11 +22,6 @@ tr{
     cursor: pointer;
 }
 
-/* tr:nth-child(odd){
-    background-color: #dee2e6;
-}
-*/
-
 tr:hover {
     background: #e9ecef;
 }
@@ -221,6 +216,7 @@ table{
 }
 
 .user_statements {
+    position: relative;
     margin-left: 20px;
     padding: 20px;
     display: inline;
@@ -248,6 +244,40 @@ table{
 
 }
 
+.checkbox {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 14px;
+    font-size: 12px;
+    color: white;
+    background-color: #ccc;
+  }
+
+  .checked {
+    background-color: green;
+  }
+  .unchecked {
+    background-color: red;
+  }
+
+  .mark-green { background-color: #90be6d; }
+  .mark-red { background-color: #f07167; }
+  .mark-gray { background-color: 0; }
+  .mark-yellow { background-color: #ffc300; }
+  .mark-blue { background-color: #168aad; }
+
+
+.average_mark {
+    padding: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+}
 
 
 /*  FOOTER  */

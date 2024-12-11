@@ -4,7 +4,7 @@ from random import randint
 from PIL import ImageFont, Image, ImageDraw
 from flask_login import login_user, login_required, current_user
 from flask_security import logout_user
-from sqlalchemy.sql.functions import random
+from sqlalchemy.sql.functions import random, func
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import redirect
 
@@ -34,6 +34,7 @@ def get_students(page=1):
 
 
 @app.route("/students/<int:stud_id>/delete", methods=['POST'])
+@login_required
 def delete_student(stud_id):
     student = Student.query.get_or_404(stud_id)
     try:
@@ -45,6 +46,7 @@ def delete_student(stud_id):
 
 
 @app.route("/students/create-student", methods=["POST"])
+@login_required
 def create_student():
     name = request.form.get("name")
     surname = request.form.get("surname")
@@ -68,6 +70,7 @@ def create_student():
 
 
 @app.route("/students/students/update/<int:stud_id>", methods=['POST'])
+@login_required
 def student_update(stud_id):
     student = Student.query.get(stud_id)
     student.name = request.form['name']
@@ -88,6 +91,7 @@ def student_update(stud_id):
 
 
 @app.route("/lecturers/page=<int:page>")
+@login_required
 def get_lecturers(page=1):
     per_page = 20
     # rows = Lecturer.query.get_or_404(Lecturer.lecturer_id.asc()).all()
@@ -98,6 +102,7 @@ def get_lecturers(page=1):
 
 
 @app.route("/create-lect", methods=['POST'])
+@login_required
 def create_lecturer():
     name = request.form.get("name")
     surname = request.form.get("surname")
@@ -118,6 +123,7 @@ def create_lecturer():
 
 
 @app.route("/lecturers/<int:lecturer_id>/delete", methods=['POST'])
+@login_required
 def delete_lecturer(lecturer_id):
     lecturer = Lecturer.query.get_or_404(lecturer_id)
     try:
@@ -130,6 +136,7 @@ def delete_lecturer(lecturer_id):
 
 
 @app.route("/lecturers/lecturers/update/<int:lecturer_id>", methods=['POST'])
+@login_required
 def lecturer_update(lecturer_id):
     lecturer = Lecturer.query.get_or_404(lecturer_id)
 
@@ -149,6 +156,7 @@ def lecturer_update(lecturer_id):
 
 
 @app.route("/statements")
+@login_required
 def get_statements():
     types = LessonType.query.all()
     forms = LessonForm.query.all()
@@ -165,6 +173,7 @@ def get_statements():
 
 
 @app.route("/create-statement", methods=["POST"])
+@login_required
 def create_statement():
     group_id = request.form.get("group_id")
     date = request.form.get("date")
@@ -188,6 +197,7 @@ def create_statement():
 
 
 @app.route("/statements/<int:statement_id>/delete", methods=['POST'])
+@login_required
 def delete_statement(statement_id):
     statement = Statement.query.get_or_404(statement_id)
     try:
@@ -200,6 +210,7 @@ def delete_statement(statement_id):
 
 
 @app.route("/statements/update/<int:statement_id>", methods=['POST'])
+@login_required
 def statement_update(statement_id):
     statement = Statement.query.get_or_404(statement_id)
 
@@ -218,6 +229,7 @@ def statement_update(statement_id):
 
 
 @app.route("/create-statement/create-stud-lesson", methods=['POST', 'GET'])
+@login_required
 def create_stud_lesson():
     data = request.get_json()
     print(data)
@@ -242,6 +254,7 @@ def create_stud_lesson():
 
 
 @app.route("/get-student/<int:student_id>")
+@login_required
 def get_student(student_id):
     student = Student.query.get_or_404(student_id)
     return jsonify({
@@ -300,7 +313,7 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return redirect('/students')
+    return redirect('/students/page=1')
 
 
 @app.after_request
@@ -316,21 +329,44 @@ def user_info():
     user = Student.query.filter_by(email=current_user.login).first()  # получаю себя по своему же login`У
     # Считаю % посещаемости
     student_in_statements = StudentInStatement.query.filter(StudentInStatement.stud_id == user.stud_id)
-    statements = Statement.query.filter(Statement.statement_id == StudentInStatement.statement_id)
-
     statements_count = student_in_statements.count()
-
     statements_is_here = (StudentInStatement.query.filter(StudentInStatement.stud_id == user.stud_id,
-                                                         StudentInStatement.is_here == True)).count()
-
-    print(statements_is_here)
-
+                                                          StudentInStatement.is_here == True)).count()
     attendance = round((statements_is_here / statements_count) * 100, 2) if statements_is_here else 0
 
-    print(student_in_statements)
+    results = (
+        db.session.query(
+            Statement.statement_id,
+            Discipline.discipline_id,
+            Discipline.name.label('discipline_name'),
+            Statement.group_id,
+            Statement.date,
+            Statement.lesson_type,
+            Statement.lesson_form,
+            StudentInStatement.mark,
+            StudentInStatement.comment,
+            StudentInStatement.is_here
+        )
+        .join(Discipline, Statement.discipline_id == Discipline.discipline_id)
+        .join(StudentInStatement, Statement.statement_id == StudentInStatement.statement_id)
+        .filter(StudentInStatement.stud_id == user.stud_id)
+        .all()
+    )
+
+    result = db.session.query(func.sum(StudentInStatement.mark), func.count(StudentInStatement.mark)) \
+        .filter(StudentInStatement.stud_id == user.stud_id, StudentInStatement.mark != 0) \
+        .one()
+
+    # Извлекаем сумму и количество
+    total_sum, total_count = result
+
+    # Вычисляем среднюю оценку
+    average_mark = round(total_sum / total_count if total_count > 0 else 0)
+
 
     return render_template('profile.html', user=user,
-                           attendance=attendance, user_in_statements=student_in_statements, statements=statements)
+                           attendance=attendance, user_in_statements=student_in_statements,
+                           statements=results, average_mark=average_mark)
 
 
 def generate_avatar(first_name, last_name):

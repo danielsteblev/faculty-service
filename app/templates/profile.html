@@ -88,7 +88,7 @@
         <div class="statement-table">
             <table>
                 <thead>
-                <tr>
+                <tr style="border: none">
                     <th>Дата</th>
                     <th>Дисциплина</th>
                     <th>Тип занятия</th>
@@ -100,15 +100,30 @@
                 </thead>
 
                 <tbody>
-                {% for row in user_in_statements %}
-                <tr>
+                {% for row in statements %}
+                <tr style="border: none; font-size: 15px">
+                    <td>{{row.date}}</td>
+                    <td>{{row.discipline_name}}</td>
+                    <td>{{row.lesson_type}}</td>
+                    <td>{{row.lesson_form}}</td>
+                    <td class="is_here">
+                        {% if row.is_here %}
+                        <span class="checkbox checked">✓</span>
+                        {% else %}
+                        <span class="checkbox unchecked">✗</span>
+                        {% endif %}
+                    </td>
+                    <td style="font-weight: 500; text-align: center;" class="{% if row.mark >= 45 %}mark-green{% elif row.mark >= 35 %}mark-blue{% elif row.mark >= 25 %}mark-yellow{% elif row.mark > 0 %}mark-red{% else %}mark-gray{% endif %}">
+                        {{ row.mark }}
+                    </td>
                     <td>{{row.comment}}</td>
-                    <td class="is_here">{{'+' if row.is_here else '—'}}</td>
-                    <td>{{row.mark}}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
+        <div class="average_mark">
+            Cредняя оценка: <span style="padding: 2px;" class="{% if average_mark >= 45 %}mark-green{% elif average_mark >= 35 %}mark-blue{% elif average_mark >= 25 %}mark-yellow{% elif average_mark > 0 %}mark-red{% else %}mark-gray{% endif %}">{{ average_mark }}</span>
         </div>
     </div>
 </div>
