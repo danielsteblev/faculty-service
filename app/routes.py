@@ -25,8 +25,39 @@ def main():
 @app.route("/students/page=<int:page>")
 @login_required
 def get_students(page=1):
+    name = request.args.get('name')
+    surname = request.args.get('surname')
+    patronymic = request.args.get('patronymic')
+    group_id = request.args.get('group_id')
+    phone_number = request.args.get('phone_number')
+    email = request.args.get('email')
+    birthday = request.args.get('birth_date')
+    city = request.args.get('city')
+
+    # Формируем запрос к базе данных с учетом фильтров
+    query = Student.query
+    if name:
+        query = query.filter(Student.name.contains(name))
+    if surname:
+        query = query.filter(Student.surname.contains(surname))
+    if patronymic:
+        query = query.filter(Student.patronymic.contains(patronymic))
+    if group_id:
+        query = query.filter(Student.group_id == group_id)
+    if phone_number:
+        query = query.filter(Student.phone_number.contains(phone_number))
+    if email:
+        query = query.filter(Student.email.contains(email))
+    if birthday:
+        query = query.filter(Student.birthday == birthday)
+    if city:
+        query = query.filter(Student.city.contains(city))
+
+    # Выполняем запрос и получаем результат
+
     per_page = 20
-    students = Student.query.order_by(Student.stud_id).paginate(page=page, per_page=per_page, error_out=False)
+
+    students = query.order_by(Student.stud_id).paginate(page=page, per_page=per_page, error_out=False)
     # students = Student.query.order_by(Student.stud_id.asc()).all()
     groups = Group.query.order_by(Group.group_id.asc()).all()
     return render_template('students.html', rows=students, groups=groups, page=page, has_next=students.has_next,
@@ -93,10 +124,33 @@ def student_update(stud_id):
 @app.route("/lecturers/page=<int:page>")
 @login_required
 def get_lecturers(page=1):
+    name = request.args.get('name')
+    surname = request.args.get('surname')
+    patronymic = request.args.get('patronymic')
+    phone_number = request.args.get('phone_number')
+    email = request.args.get('email')
+    position = request.args.get('position')
+
+    # Формируем запрос к базе данных с учетом фильтров
+    query = Lecturer.query
+    if name:
+        query = query.filter(Lecturer.name.contains(name))
+    if surname:
+        query = query.filter(Lecturer.surname.contains(surname))
+    if patronymic:
+        query = query.filter(Lecturer.patronymic.contains(patronymic))
+    if phone_number:
+        query = query.filter(Lecturer.phone_number.contains(phone_number))
+    if email:
+        query = query.filter(Lecturer.email.contains(email))
+    if position:
+        query = query.filter(Lecturer.position == position)
+
     per_page = 20
-    # rows = Lecturer.query.get_or_404(Lecturer.lecturer_id.asc()).all()
-    lecturers = Lecturer.query.order_by(Lecturer.lecturer_id.asc()).paginate(page=page, per_page=per_page,
+
+    lecturers = query.order_by(Lecturer.lecturer_id).paginate(page=page, per_page=per_page,
                                                                              error_out=False)
+
     return render_template('lecturers.html', lecturers=lecturers, page=page, has_next=lecturers.has_next,
                            has_prev=lecturers.has_prev)
 
@@ -315,6 +369,7 @@ def logout():
     logout_user()
     return redirect('/students/page=1')
 
+
 @app.after_request
 def redirect_to_signin(response):
     if response.status_code == 401:
@@ -361,7 +416,6 @@ def user_info():
 
     # Вычисляем среднюю оценку
     average_mark = round(total_sum / total_count if total_count > 0 else 0)
-
 
     return render_template('profile.html', user=user,
                            attendance=attendance, user_in_statements=student_in_statements,

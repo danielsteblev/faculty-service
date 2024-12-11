@@ -188,6 +188,25 @@ table{
     float: right;
 }
 
+.filtered {
+    display: flex;
+    margin: 10px;
+}
+
+.filtered-input {
+    width: 170px;
+}
+
+.table-settings {
+    display: inline-block;
+}
+
+.filtered-span {
+    font-weight: 900;
+    font-color: #ededed
+
+}
+
 
 
 
